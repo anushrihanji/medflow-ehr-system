@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedFlow EHR — Dashboard</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="dash-body" data-role="{{ role }}">
+
+  <header class="topbar">
+    <div class="topbar-mark">
+      <span class="mark-glyph small">+</span>
+      <span class="mark-name small">MedFlow</span>
+    </div>
+    <div class="topbar-user">
+      <span class="user-chip">{{ "Dr." if role == "doctor" and not display_name.startswith("Dr.") else "" }} {{ display_name }}</span>
+      <span class="role-pill role-{{ role }}">{{ role|capitalize }}</span>
+      <a class="logout-link" href="{{ url_for('logout') }}">Sign out</a>
+    </div>
+  </header>
+
+  <main class="dash-main">
+
+    <section id="moduleHome">
+      <h1 class="dash-greeting">Welcome back<span id="greetName"></span></h1>
+      <p class="dash-sub">Choose a module to continue.</p>
+
+      <div class="module-grid">
+        <button class="module-card" data-module="health" type="button">
+          <span class="module-num">01</span>
+          <h2>Storing &amp; Managing<br>Patient Health Data</h2>
+          <p>Demographics, diagnoses, lab history &amp; clinical notes.</p>
+          <svg class="module-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+
+        <button class="module-card" data-module="rx" type="button">
+          <span class="module-num">02</span>
+          <h2>Electronic<br>Prescriptions</h2>
+          <p>Active medications, dosage, refills &amp; status.</p>
+          <svg class="module-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+
+        <button class="module-card" data-module="booking" type="button">
+          <span class="module-num">03</span>
+          <h2>Scheduling &amp;<br>Managing Appointments</h2>
+          <p>Booking list — phone, online, walk-in &amp; reschedules.</p>
+          <svg class="module-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+
+        <button class="module-card" data-module="progress" type="button">
+          <span class="module-num">04</span>
+          <h2>Tracking Progress &amp;<br>Medical History</h2>
+          <p>View recovery progress as a percentage score.</p>
+          <svg class="module-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ============== MODULE 1: HEALTH DATA ============== -->
+    <section id="moduleHealth" class="module-panel hidden">
+      <button class="back-link" data-back type="button">&larr; Back to dashboard</button>
+      <h1>Patient Health Data</h1>
+      <div id="healthContent" class="panel-content"></div>
+    </section>
+
+    <!-- ============== MODULE 2: PRESCRIPTIONS ============== -->
+    <section id="moduleRx" class="module-panel hidden">
+      <button class="back-link" data-back type="button">&larr; Back to dashboard</button>
+      <h1>Electronic Prescriptions</h1>
+      <div id="rxContent" class="panel-content"></div>
+    </section>
+
+    <!-- ============== MODULE 3: BOOKING ============== -->
+    <section id="moduleBooking" class="module-panel hidden">
+      <button class="back-link" data-back type="button">&larr; Back to dashboard</button>
+      <h1>Appointment Booking List</h1>
+      <div id="bookingContent" class="panel-content"></div>
+    </section>
+
+    <!-- ============== MODULE 4: PROGRESS ============== -->
+    <section id="moduleProgress" class="module-panel hidden">
+      <button class="back-link" data-back type="button">&larr; Back to dashboard</button>
+      <h1>Progress &amp; Medical History</h1>
+      <div id="progressContent" class="panel-content"></div>
+    </section>
+
+  </main>
+
+  <!-- Booking mode picker modal (patient only) -->
+  <div class="modal-overlay hidden" id="bookingModal">
+    <div class="modal-card">
+      <button class="modal-close" id="closeBookingModal" type="button">&times;</button>
+      <h2>How was this booked?</h2>
+      <p class="modal-sub" id="modalApptInfo"></p>
+      <div class="mode-grid">
+        <button class="mode-tile" data-mode="Phone" type="button">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+          <span>Phone</span>
+        </button>
+        <button class="mode-tile" data-mode="Online" type="button">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+          <span>Online</span>
+        </button>
+        <button class="mode-tile" data-mode="Walk-In" type="button">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="3"/><path d="M9 21v-6l-2-3 3-4 2 2 2-2 3 4-2 3v6"/></svg>
+          <span>Walk-In</span>
+        </button>
+      </div>
+      <div class="reschedule-box hidden" id="rescheduleBox">
+        <label class="field-label" for="rescheduleReason">Reason for reschedule</label>
+        <textarea class="field-input" id="rescheduleReason" rows="3" placeholder="e.g. Doctor unavailable, patient request..."></textarea>
+        <button class="cta-btn small" id="confirmRescheduleReason" type="button">Save reason</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress detail modal -->
+  <div class="modal-overlay hidden" id="progressModal">
+    <div class="modal-card wide">
+      <button class="modal-close" id="closeProgressModal" type="button">&times;</button>
+      <div id="progressModalContent"></div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

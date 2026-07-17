@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedFlow EHR — Sign In</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="welcome-body">
+
+  <div class="pulse-line" aria-hidden="true">
+    <svg viewBox="0 0 1200 80" preserveAspectRatio="none">
+      <polyline class="pulse-path" points="0,40 150,40 175,10 200,70 225,40 400,40 425,15 450,65 475,40 700,40 725,8 750,72 775,40 1200,40" />
+    </svg>
+  </div>
+
+  <main class="welcome-shell">
+    <header class="welcome-mark">
+      <span class="mark-glyph">+</span>
+      <div class="mark-text">
+        <span class="mark-name">MedFlow</span>
+        <span class="mark-sub">Electronic Health Records</span>
+      </div>
+    </header>
+
+    <section class="auth-card" id="authCard">
+
+      <div class="auth-step" id="stepRole">
+        <h1>Who's signing in?</h1>
+        <p class="step-hint">Choose your role to continue.</p>
+
+        <div class="role-grid">
+          <button class="role-tile" data-role="patient" type="button">
+            <span class="role-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48"><circle cx="24" cy="16" r="9"/><path d="M6 42c0-10 8-16 18-16s18 6 18 16"/></svg>
+            </span>
+            <span class="role-label">Patient</span>
+            <span class="role-desc">View my records &amp; appointments</span>
+          </button>
+
+          <button class="role-tile" data-role="doctor" type="button">
+            <span class="role-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48"><path d="M18 6v10a6 6 0 0 0 12 0V6"/><path d="M14 18v6a10 10 0 0 0 20 0v-6"/><circle cx="24" cy="38" r="5"/></svg>
+            </span>
+            <span class="role-label">Doctor</span>
+            <span class="role-desc">Manage patients &amp; care plans</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="auth-step hidden" id="stepCreds">
+        <button class="back-link" id="backToRole" type="button">&larr; Change role</button>
+        <h1 id="credsTitle">Patient sign in</h1>
+        <p class="step-hint" id="credsHint">Enter your Patient ID and password.</p>
+
+        <form id="loginForm" autocomplete="off">
+          <label class="field-label" id="identifierLabel" for="identifierInput">Patient ID</label>
+          <select class="field-input" id="identifierSelect" required></select>
+
+          <label class="field-label" for="passwordInput">Password</label>
+          <div class="password-field">
+            <input class="field-input" type="password" id="passwordInput" placeholder="Enter password" required autocomplete="new-password">
+            <button type="button" class="reveal-btn" id="revealBtn" aria-label="Show password">
+              <svg viewBox="0 0 24 24" id="eyeIcon"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+
+          <p class="error-msg hidden" id="errorMsg"></p>
+
+          <button type="submit" class="cta-btn" id="loginBtn">
+            <span>Login</span>
+            <svg viewBox="0 0 24 24" class="cta-arrow"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </form>
+      </div>
+
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/welcome.js') }}"></script>
+</body>
+</html>
